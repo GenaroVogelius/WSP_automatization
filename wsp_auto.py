@@ -5,6 +5,10 @@ from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 import pandas as pd
 import time
+import os
+from pathlib import Path
+
+BASE_DIR = Path(__file__).resolve().parent
 
 
 # ? browser
@@ -17,15 +21,15 @@ driver.get("https://web.whatsapp.com/")
 wait=WebDriverWait(driver,500)
 
 
-filename = r'C:\Users\Usuario\Downloads\envio_wsp.xlsx'
+filename = os.path.join(BASE_DIR, "envio_wsp.xlsx")
 
 df = pd.read_excel(filename, header=0)
 
-DIA = input("dia?")
-FECHA = input("fecha?")
+DIA = input("Dia?")
+FECHA = input("Fecha?")
 list_celular = []
 
-# bucle start getting data from excel:
+#? bucle start getting data from excel:
 for index, row in df.iterrows():
     codigo = row['CÓDIGO']
     cel = row['CELULAR']
