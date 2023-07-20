@@ -22,6 +22,8 @@ wait=WebDriverWait(driver,500)
 
 
 filename = os.path.join(BASE_DIR, "envio_wsp.xlsx")
+PDF_CARTA = os.path.join(BASE_DIR, "CARTA_COMPROMISO.pdf")
+PDF_DETALLE = os.path.join(BASE_DIR, "DETALLE_BENEFICIARIO.pdf")
 
 df = pd.read_excel(filename, header=0)
 
@@ -38,7 +40,7 @@ for index, row in df.iterrows():
     
     
     br = (Keys.SHIFT)+(Keys.ENTER)+(Keys.SHIFT) 
-    message = f"*PROGRAMA DE REFUERZO ALIMENTARIO DE BAR-PROVINCIA-MUNI Y CONCEJO*{br}Nos comunicamos para enviarles la confirmación del día y horario asignados para la entrega de alimentos, que se hacen en Carriego 360:{br} ✅ *DIA: {DIA} {FECHA}*{br} ✅ *HORA: 14:00*{br} ✅ *CÓDIGO: {codigo}*{br} ⚠️ *IMPORTANTE* ⚠️{br} ✅ *RESPETAR EL HORARIO ASIGNADO*{br} ✅ *ENVIARNOS NOMBRE Y DNI DE QUIEN RETIRA*"
+    message = f"*PROGRAMA DE REFUERZO ALIMENTARIO DE BAR-PROVINCIA-MUNI Y CONCEJO*{br}Nos comunicamos para enviarles la confirmación del día y horario asignados para la entrega de alimentos, que se hacen en Carriego 360:{br} ✅ *DIA: {DIA} {FECHA}*{br} ✅ *HORA: 14:00*{br} ✅ *CÓDIGO: {codigo}*{br} ⚠️ *IMPORTANTE* ⚠️{br} ✅ *RESPETAR EL HORARIO ASIGNADO*{br} ✅ *ENVIARNOS NOMBRE Y DNI DE QUIEN RETIRA*{br} {br} *COMPLETAR LOS SIGUIENTES DOCUMENTOS ADJUNTADOS Y TRAERLOS IMPRESOS EN EL PRÓXIMO RETIRO DE ALIMENTOS*"
     
 
     # ? catch the search
@@ -76,7 +78,27 @@ for index, row in df.iterrows():
         input_user.send_keys(f"También tenes el siguiente código para retirar {codigo}" + Keys.ENTER)
     else:
         input_user.send_keys(message + Keys.ENTER)
+        time.sleep(2)
+
+        # MANDAS UN DOCUMENTO
+        driver.find_element(By.CSS_SELECTOR, "span[data-icon='clip']").click()
+
+        driver.find_element(By.CSS_SELECTOR,"input[type='file']").send_keys(PDF_CARTA)
+
+        time.sleep(3)
+        driver.find_element(By.CSS_SELECTOR,"span[data-icon='send']").click()
+        time.sleep(2)
+
+        # MANDAS UN DOCUMENTO
+        driver.find_element(By.CSS_SELECTOR, "span[data-icon='clip']").click()
+
+        driver.find_element(By.CSS_SELECTOR,"input[type='file']").send_keys(PDF_DETALLE)
+
+        time.sleep(3)
+        driver.find_element(By.CSS_SELECTOR,"span[data-icon='send']").click()
+        
         list_celular.append(cel)
+        time.sleep(2)
     
     input_tab.send_keys(Keys.CONTROL + "a")
     input_tab.send_keys(Keys.DELETE)
