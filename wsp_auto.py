@@ -27,6 +27,9 @@ PDF_DETALLE = os.path.join(BASE_DIR, "DETALLE_BENEFICIARIO.pdf")
 
 df = pd.read_excel(filename, header=0)
 
+print("Programa de automatización de envios de mensajes")
+print("RECORDATORIOS:\n-Haber guardado excel antes de ingresar al programa\n-Tener agendados los contactos\n-Para mejor funcionamiento no hacer otra actividad en la computadora que demande internet\n-Chequear con el celular si el primer mensaje enviado corresponde a la primera persona en el excel.")
+
 DIA = input("Dia?")
 FECHA = input("Fecha?")
 list_celular = []
