@@ -84,7 +84,7 @@ for index, row in df.iterrows():
         time.sleep(2)
 
         # MANDAS UN DOCUMENTO
-        driver.find_element(By.CSS_SELECTOR, "span[data-icon='clip']").click()
+        driver.find_element(By.CSS_SELECTOR, "span[data-icon='attach-menu-plus']").click()
 
         driver.find_element(By.CSS_SELECTOR,"input[type='file']").send_keys(PDF_CARTA)
 
@@ -93,7 +93,7 @@ for index, row in df.iterrows():
         time.sleep(2)
 
         # MANDAS UN DOCUMENTO
-        driver.find_element(By.CSS_SELECTOR, "span[data-icon='clip']").click()
+        driver.find_element(By.CSS_SELECTOR, "span[data-icon='attach-menu-plus']").click()
 
         driver.find_element(By.CSS_SELECTOR,"input[type='file']").send_keys(PDF_DETALLE)
 
