@@ -64,6 +64,7 @@ for index, row in df.iterrows():
     
     not_found = '//span[text()="No se encontró ningún chat, contacto ni mensaje."]'
     try:
+        time.sleep(2)
         driver.find_element(By.XPATH, not_found)
         print(f"No se ha encontrado la organización barrial *{OB}* con el numero *{cel}*, contiene el código *{codigo}*")
         input_tab.send_keys(Keys.CONTROL + "a")
@@ -73,8 +74,8 @@ for index, row in df.iterrows():
         pass
 
     
-    # ? catch the input for writting message
-    time.sleep(2)
+    # catch the input for writting message
+    
     input_user = wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, '#main > footer > div._2lSWV._3cjY2.copyable-area > div > span:nth-child(2) > div > div._1VZX7 > div._3Uu1_ > div > div.to2l77zo.gfz4du6o.ag5g9lrv.bze30y65.kao4egtt')))
     
     if cel in list_celular:
