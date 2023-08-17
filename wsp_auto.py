@@ -58,7 +58,7 @@ class WhatsAppAutomator:
             try:
                 time.sleep(2)
                 self.driver.find_element(By.XPATH, not_found)
-                print(f"No se ha encontrado la organización barrial *{OB}* con el numero *{cel}*, contiene el código *      {codigo}*")
+                print(f"No se ha encontrado la organización barrial {OB} con el numero {cel}")
                 input_tab.send_keys(Keys.CONTROL + "a")
                 input_tab.send_keys(Keys.DELETE)
                 return True
