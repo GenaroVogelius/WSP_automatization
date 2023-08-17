@@ -65,18 +65,18 @@ class WhatsAppAutomator:
             except:
                 return False
 
-
+        def repeat_number():
+            if cel in self.list_celular:
+                return True
+            else:
+                return False
+            
         def write_message():
             # catch the input for writting message
             input_message = self.wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, '#main > footer > div._2lSWV._3cjY2.copyable-area > div > span:nth-child(2) > div > div._1VZX7 > div._3Uu1_ > div > div.to2l77zo.gfz4du6o.ag5g9lrv.bze30y65.kao4egtt')))
-
-            if cel in self.list_celular:
-                input_message.send_keys(f"También tenes el siguiente código para retirar {codigo}" + Keys.ENTER)
-                return True
-            else:
-                input_message.send_keys(message + Keys.ENTER)
-                time.sleep(2)
-                return False
+            input_message.send_keys(message + Keys.ENTER)
+            time.sleep(2)
+            return False
 
         def send_documents():
             # MANDAS UN DOCUMENTO
@@ -90,12 +90,11 @@ class WhatsAppAutomator:
 
 
         for index, row in df.iterrows():
-            cel = row['CELULAR']
-            codigo = row['CÓDIGO']
-            OB = row["NOMBRE OB"]
+            cel = row['celular']
+            OB = row["OB"]
 
             br = (Keys.SHIFT)+(Keys.ENTER)+(Keys.SHIFT) 
-            message = f"hola que tal"
+            message = f"ACTUALIZACIÓN VALOR CUOTA MEMBRESÍA.{br}*Leer, importante. Muchas gracias*"
             
             click_in_search_tab()
             input_tab = write_in_search_tab()
@@ -106,12 +105,13 @@ class WhatsAppAutomator:
             if is_not_found:
                 continue
             else:
-                already_send_a_message = write_message()
+                already_send_a_message = repeat_number()
                 if already_send_a_message:
                     continue
                 else:
                     send_documents()
-
+                    write_message()
+                    
 
 
 
