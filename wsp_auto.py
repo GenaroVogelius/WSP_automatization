@@ -67,6 +67,8 @@ class WhatsAppAutomator:
 
         def repeat_number():
             if cel in self.list_celular:
+                input_tab.send_keys(Keys.CONTROL + "a")
+                input_tab.send_keys(Keys.DELETE)
                 return True
             else:
                 return False
