@@ -58,7 +58,7 @@ class WhatsAppAutomator:
             try:
                 time.sleep(2)
                 self.driver.find_element(By.XPATH, not_found)
-                print(f"No se ha encontrado la organización barrial {OB} con el numero {cel}")
+                print(f"No se ha encontrado la organización barrial {nombre_OB} con el numero {cel}")
                 input_tab.send_keys(Keys.CONTROL + "a")
                 input_tab.send_keys(Keys.DELETE)
                 return True
@@ -86,17 +86,16 @@ class WhatsAppAutomator:
             self.driver.find_element(By.CSS_SELECTOR,"input[type='file']").send_keys(abono_imagen)
             time.sleep(3)
             self.driver.find_element(By.CSS_SELECTOR,"span[data-icon='send']").click()
-
-            self.list_celular.append(cel)
             time.sleep(2)
 
 
         for index, row in df.iterrows():
-            cel = row['celular']
-            OB = row["OB"]
+            cel = row['CELULAR']
+            link = row['LINK']
+            nombre_OB = row["nombre_OB"]
 
             br = (Keys.SHIFT)+(Keys.ENTER)+(Keys.SHIFT) 
-            MESSAGE = f"ACTUALIZACIÓN VALOR CUOTA MEMBRESÍA.{br}*Leer, importante. Muchas gracias*"
+            MESSAGE = f'Buenas! Qué tal? Me llamo Helam y me comunico del Área de Administración del Banco de Alimentos Rosario!{br}Este es el link de pago para la nueva membresía de Fruta y Verdura *{link}*. Utilizarlo es muy sencillo:{br}*1)* Tocar o Clickear el link. Les va a redirigir a una página de internet (deben esperar a que cargue){br}*2)* Van a aparecer los distintos métodos de pago disponibles. Seleccionar el método que más les convenga (EFECTIVO para pagar en un rapipago o pagofacil, Tarjeta de Débito o Tarjeta de Crédito){br}*3)* Si selecciona para usar tarjeta simplemente debe cargar los datos de la tarjeta. Si selecciona "EFECTIVO" a continuación le dará a elegir entre pagar en un Rapipago o un Pagofacil. Seleccionar la que más le convenga por cercanía.{br}*4)* Una vez seleccionado el método de pago en efectivo, le va a proporcionar un código (números) que deberá presentar al momento de abonar con el efectivo en el rapipago o pagofacil.{br}*5)* Guardar siempre el ticket/comprobante del pago en efectivo.{br}La ventaja del link de pago es que no se necesita enviar ningún comprobante a nosotros porque el pago impacta automáticamente en nuestro sistema de Mercado Pago :){br}Cualquier duda referida a pagos/facturación, no dudes en escribirnos, estamos a disposición :)'
             
             click_in_search_tab()
             input_tab = write_in_search_tab()
@@ -111,8 +110,8 @@ class WhatsAppAutomator:
                 if already_send_a_message:
                     continue
                 else:
-                    send_documents()
                     write_message()
+                    self.list_celular.append(cel)
                     
 
 
