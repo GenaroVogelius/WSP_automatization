@@ -76,7 +76,7 @@ class WhatsAppAutomator:
         def write_message():
             # catch the input for writting message
             input_message = self.wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, '#main > footer > div._2lSWV._3cjY2.copyable-area > div > span:nth-child(2) > div > div._1VZX7 > div._3Uu1_ > div > div.to2l77zo.gfz4du6o.ag5g9lrv.bze30y65.kao4egtt')))
-            input_message.send_keys(message + Keys.ENTER)
+            input_message.send_keys(MESSAGE + Keys.ENTER)
             time.sleep(2)
             return False
 
@@ -96,7 +96,7 @@ class WhatsAppAutomator:
             OB = row["OB"]
 
             br = (Keys.SHIFT)+(Keys.ENTER)+(Keys.SHIFT) 
-            message = f"ACTUALIZACIÓN VALOR CUOTA MEMBRESÍA.{br}*Leer, importante. Muchas gracias*"
+            MESSAGE = f"ACTUALIZACIÓN VALOR CUOTA MEMBRESÍA.{br}*Leer, importante. Muchas gracias*"
             
             click_in_search_tab()
             input_tab = write_in_search_tab()
