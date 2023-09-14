@@ -7,15 +7,15 @@ import pandas as pd
 import time
 import os
 from pathlib import Path
+from selenium.webdriver.chrome.options import Options
 
 
-
-
-
-class WhatsAppAutomator:
+class WhatsAppAutomator():
     def __init__(self):
+        options = Options()
+        options.add_argument('--ignore-certificate-errors')
         self.BASE_DIR = Path(__file__).resolve().parent
-        self.driver = webdriver.Chrome()
+        self.driver = webdriver.Chrome(options=options)
         self.wait = WebDriverWait(self.driver, 500)
         self.list_celular = []
 
@@ -26,9 +26,8 @@ class WhatsAppAutomator:
         return df
 
     def get_dates(self):
-        DIA = input("Dia?")
-        FECHA = input("Fecha?")
-        return (DIA, FECHA)
+        self.DIA = input("Dia? ").strip().upper()
+        self.FECHA = input("Fecha? ")
     
     def open_wsp(self):
         driver = self.driver
@@ -77,7 +76,7 @@ class WhatsAppAutomator:
             input_message = self.wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, '#main > footer > div._2lSWV._3cjY2.copyable-area > div > span:nth-child(2) > div > div._1VZX7 > div._3Uu1_ > div > div.to2l77zo.gfz4du6o.ag5g9lrv.bze30y65.kao4egtt')))
             input_message.send_keys(MESSAGE + Keys.ENTER)
             time.sleep(2)
-            return False
+            
 
         def send_documents():
             # MANDAS UN DOCUMENTO
@@ -85,33 +84,31 @@ class WhatsAppAutomator:
             self.driver.find_element(By.CSS_SELECTOR,"input[type='file']").send_keys()
             time.sleep(3)
             self.driver.find_element(By.CSS_SELECTOR,"span[data-icon='send']").click()
-
-            self.list_celular.append(cel)
             time.sleep(2)
 
 
         for index, row in df.iterrows():
             cel = row['celular']
             OB = row["OB"]
+            codigo = row["codigos"]
 
             br = (Keys.SHIFT)+(Keys.ENTER)+(Keys.SHIFT) 
-            MESSAGE = f"ACTUALIZACIÓN VALOR CUOTA MEMBRESÍA.{br}*Leer, importante. Muchas gracias*"
+            MESSAGE = f"*PROGRAMA DE REFUERZO ALIMENTARIO DE BAR-PROVINCIA-MUNI Y CONCEJO*{br}Nos comunicamos para enviarles la confirmación del día y horario asignados para la entrega de alimentos, que se hacen en Carriego 360:{br} ✅ *DIA: {self.DIA} {self.FECHA}*{br} ✅ *HORA: 14:00*{br} ✅ *CÓDIGO: {codigo}*{br} ⚠️ *IMPORTANTE* ⚠️{br} ✅ *RESPETAR EL HORARIO ASIGNADO*{br} ✅ *ENVIARNOS NOMBRE Y DNI DE QUIEN RETIRA*."
+
+            already_send_a_message = repeat_number()
+            if already_send_a_message:
+                continue
             
             click_in_search_tab()
             input_tab = write_in_search_tab()
             click_first_user(input_tab)
 
             is_not_found = checker_not_found()
-            
             if is_not_found:
                 continue
             else:
-                already_send_a_message = repeat_number()
-                if already_send_a_message:
-                    continue
-                else:
-                    send_documents()
-                    write_message()
+                self.list_celular.append(cel)
+                write_message()
                     
 
 
@@ -120,10 +117,10 @@ class WhatsAppAutomator:
 
     def trigger_automatization(self):
         df = self.getter_files()
-        # DIA, FECHA = self.get_dates()
+        self.get_dates()
 
-        print("Programa de automatización de envios de mensajes")
-        print("RECORDATORIOS:\n-Haber guardado excel antes de ingresar al programa\n-Tener agendados los contactos\n-Para mejor funcionamiento no hacer otra actividad en la computadora que demande internet\n-Chequear con el celular si el primer mensaje enviado corresponde a la primera persona en el excel.")
+        print("Programa de automatización de envios de mensajes.")
+        print("RECORDATORIOS:\n-Haber guardado excel antes de ingresar al programa.\n-Tener agendados los contactos.\n-Para mejor funcionamiento no hacer otra actividad en la computadora que demande internet.\n-Chequear con el celular si el primer mensaje enviado corresponde a la primera persona en el excel.")
         self.open_wsp()
         self.send_messages(df)
         
