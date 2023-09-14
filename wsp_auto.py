@@ -21,10 +21,9 @@ class WhatsAppAutomator:
 
 
     def getter_files(self):
-        abonos_imagen = os.path.join(self.BASE_DIR, "abonos_nuevos.jpeg")
         filename_excel = os.path.join(self.BASE_DIR, "envio_wsp.xlsx")
         df = pd.read_excel(filename_excel, header=0)
-        return df,abonos_imagen
+        return df
 
     def get_dates(self):
         DIA = input("Dia?")
@@ -35,7 +34,7 @@ class WhatsAppAutomator:
         driver = self.driver
         driver.get("https://web.whatsapp.com/")
 
-    def send_messages(self, df, abono_imagen):
+    def send_messages(self, df):
         def click_in_search_tab():
             search_tab = self.wait.until(EC.element_to_be_clickable((By.XPATH, '//*[@id="side"]/div[1]/div/div/div[2]')))
             search_tab.click()
@@ -83,7 +82,7 @@ class WhatsAppAutomator:
         def send_documents():
             # MANDAS UN DOCUMENTO
             self.driver.find_element(By.CSS_SELECTOR, "span[data-icon='attach-menu-plus']").click()
-            self.driver.find_element(By.CSS_SELECTOR,"input[type='file']").send_keys(abono_imagen)
+            self.driver.find_element(By.CSS_SELECTOR,"input[type='file']").send_keys()
             time.sleep(3)
             self.driver.find_element(By.CSS_SELECTOR,"span[data-icon='send']").click()
 
@@ -120,13 +119,13 @@ class WhatsAppAutomator:
             
 
     def trigger_automatization(self):
-        df, abonos_imagen,= self.getter_files()
+        df = self.getter_files()
         # DIA, FECHA = self.get_dates()
 
         print("Programa de automatización de envios de mensajes")
         print("RECORDATORIOS:\n-Haber guardado excel antes de ingresar al programa\n-Tener agendados los contactos\n-Para mejor funcionamiento no hacer otra actividad en la computadora que demande internet\n-Chequear con el celular si el primer mensaje enviado corresponde a la primera persona en el excel.")
         self.open_wsp()
-        self.send_messages(df, abonos_imagen)
+        self.send_messages(df)
         
         input("Press enter to quit...")
         self.driver.quit()
