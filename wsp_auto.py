@@ -93,7 +93,7 @@ class WhatsAppAutomator():
             codigo = row["codigos"]
 
             br = (Keys.SHIFT)+(Keys.ENTER)+(Keys.SHIFT) 
-            MESSAGE = f"*PROGRAMA DE REFUERZO ALIMENTARIO DE BAR-PROVINCIA-MUNI Y CONCEJO*{br}Nos comunicamos para enviarles la confirmación del día y horario asignados para la entrega de alimentos, que se hacen en Carriego 360:{br} ✅ *DIA: {self.DIA} {self.FECHA}*{br} ✅ *HORA: 14:00*{br} ✅ *CÓDIGO: {codigo}*{br} ⚠️ *IMPORTANTE* ⚠️{br} ✅ *RESPETAR EL HORARIO ASIGNADO*{br} ✅ *ENVIARNOS NOMBRE Y DNI DE QUIEN RETIRA*."
+            MESSAGE = f"*PROGRAMA DE REFUERZO ALIMENTARIO DE BAR-PROVINCIA-MUNI Y CONCEJO*{br}Nos comunicamos para enviarles la confirmación del día y horario asignados para la entrega de alimentos, *ES UNA ENTREGA EVENTUAL* que se hace en Carriego 360:{br} ✅ *DIA: {self.DIA} {self.FECHA}*{br} ✅ *HORA: 14:00*{br} ✅ *CÓDIGO: {codigo}*{br} ⚠️ *IMPORTANTE* ⚠️{br} ✅ *RESPETAR EL HORARIO ASIGNADO*{br} ✅ *ENVIARNOS NOMBRE Y DNI DE QUIEN RETIRA*."
 
             already_send_a_message = repeat_number()
             if already_send_a_message:
