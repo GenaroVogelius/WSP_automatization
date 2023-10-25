@@ -154,6 +154,8 @@ class WhatsAppAutomator:
         for index, row in self.df.iterrows():
             cel = row['CELULAR']
             nombre = row["NOMBRE"]
+            if pd.isna(cel) or pd.isna(nombre):
+                 continue
 
             
             message = f"""Hola {nombre}, mí nombre es Alejo, te escribo del *Banco de Alimentos Rosario (BAR)* para invitarte a nuestra *SUPER ACCIÓN ANUAL*❗
