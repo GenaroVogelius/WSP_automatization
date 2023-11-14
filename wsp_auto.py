@@ -13,7 +13,6 @@ from PIL import Image
 import pyperclip
 from selenium.webdriver.chrome.options import Options
 from webdriver_manager.chrome import ChromeDriverManager
-
 from io import BytesIO
 import win32clipboard
 from PIL import Image
@@ -35,6 +34,7 @@ class WhatsAppAutomator:
         options.add_argument("--start-maximized")
         options.add_argument("--disable-browser-side-navigation")
 
+
         self.BASE_DIR = Path(__file__).resolve().parent
         self.driver = webdriver.Chrome(options=options)
         self.wait = WebDriverWait(self.driver, 500)
@@ -52,6 +52,7 @@ class WhatsAppAutomator:
 
 
     def getter_files(self):
+
         images_list = [os.path.join(self.BASE_DIR, image_name) for image_name in self.images_names]
         documents_list = [os.path.join(self.BASE_DIR, document_name) for document_name in self.documents_names]
         df = pd.read_excel(self.filename_excel, header=0)
@@ -183,15 +184,19 @@ class WhatsAppAutomator:
                     self.list_celular.append(cel)
 
 
+
     def open_wsp(self):
         driver = self.driver
         driver.get("https://web.whatsapp.com/")
+
 
     def trigger_automatization(self):
         print("Programa de automatización de envios de mensajes")
         print("RECORDATORIOS:\n-Haber guardado excel antes de ingresar al programa\n-Tener agendados los contactos\n-Para mejor funcionamiento no hacer otra actividad en la computadora que demande internet\n-Chequear con el celular si el primer mensaje enviado corresponde a la primera persona en el excel.")
         self.open_wsp()
         self.start_rows_iteration()
+
+
         
         input("Presiona enter para cerrar...")
         self.driver.quit()
