@@ -21,7 +21,7 @@ from PIL import Image
 
 
 class WhatsAppAutomator:
-    def __init__(self, images, documents):
+    def __init__(self, message, name_of_excel, images=None, documents=None):
 
 
         # ?  si pones esto no te anda
@@ -36,10 +36,7 @@ class WhatsAppAutomator:
         options.add_argument("--disable-browser-side-navigation")
 
         self.BASE_DIR = Path(__file__).resolve().parent
-
-
         self.driver = webdriver.Chrome(options=options)
-    
         self.wait = WebDriverWait(self.driver, 500)
         self.short_wait = WebDriverWait(self.driver, 5)
 
@@ -48,7 +45,9 @@ class WhatsAppAutomator:
         
         self.images_names = images
         self.documents_names = documents
-        self.filename_excel = os.path.join(self.BASE_DIR, "envio_wsp.xlsx")
+        self.message = pyperclip.copy(message)
+        self.filename_excel = os.path.join(self.BASE_DIR, name_of_excel)
+
         self.df, self.documents_list, self.images_list = self.getter_files()
 
 
@@ -91,19 +90,26 @@ class WhatsAppAutomator:
             self.input_tab.send_keys(Keys.ENTER)
         
 
-    def _checker_not_found(self):
+    def _checker_not_found(self,cel, nombre):
             not_found = '//span[text()="No se encontró ningún chat, contacto ni mensaje."]'
             searching = '//span[text()="Buscando chats, contactos y mensajes…"]'
             
-
-            not_found = self.short_wait.until_not(EC.presence_of_element_located((By.XPATH, not_found)))
-            if not_found:
-                not_searching = self.short_wait.until_not(EC.presence_of_element_located((By.XPATH, searching)))
-                if not_searching:
-                    return False
-            
-            else:
+            try:
+                time.sleep(2)
+                self.driver.find_element(By.XPATH, not_found)
+                print(f"No se ha encontrado a {nombre} con el numero {cel}")
+                self.input_tab.send_keys(Keys.CONTROL + "a")
+                self.input_tab.send_keys(Keys.DELETE)
                 return True
+            except:
+                try:
+                    self.driver.find_element(By.XPATH, searching)
+                    print(f"No se ha encontrado a {nombre} con el numero {cel}")
+                    self.input_tab.send_keys(Keys.CONTROL + "a")
+                    self.input_tab.send_keys(Keys.DELETE)
+                    return True
+                except:
+                    return False
 
 
     def _write_message(self):
@@ -147,38 +153,16 @@ class WhatsAppAutomator:
 
 
 
-
-
-
     def start_rows_iteration(self):
         for index, row in self.df.iterrows():
             cel = row['CELULAR']
             nombre = row["NOMBRE"]
             if pd.isna(cel) or pd.isna(nombre):
                  continue
-
             
-            message = f"""Hola {nombre}, mí nombre es Alejo, te escribo del *Banco de Alimentos Rosario (BAR)* para invitarte a nuestra *SUPER ACCIÓN ANUAL*❗
+            # Remove '-' from the 'CELULAR' column
+            self.df.at[index, 'CELULAR'] = str(cel).replace('-', '')
 
-Las personas voluntarias son el motor y la esencia de cada *GONDOLAZO*🤜🏻🤛🏻
-
-Dieron su corazón desde el día uno, su energía en cada evento y su cara, para demostrar lo poderosa que es su unión, llenando de rostros y sonrisas los Silos Davi
-Ya dieron la cara, ¡Es hora de dar una mano! 🤝
-
-Gondolazo es posible gracias a ustedes, desde hace seis años somos testigos de es
-¿Nos acompañan un año más? 🙏🏻
-
-Es muy simple, completando el siguiente formulario ¡Y listo! 📋🙌🏻
-
-Link del formulario: https://forms.gle/TnxrMzJwiFmSyS
-
-👉🏻Si quieren sumar a un amigo, amiga, familiar para vivir esta gran experiencia juntos, pueden hacerlo dejando sus datos de contacto en el mismo formular
-¡TODOS A INSCRIBIRSE QUE YA LLEGA EL 6TO GONDOLAZO!🛒🤝
-            """
-            message  = pyperclip.copy(message)
-
-
- 
 
             already_send_a_message = self._is_a_repeat_number(cel)
             if already_send_a_message:
@@ -187,7 +171,7 @@ Link del formulario: https://forms.gle/TnxrMzJwiFmSyS
                 self._click_in_search_tab()
                 self._write_in_search_tab(cel)
                 self._click_first_user()
-                is_not_found =self._checker_not_found()
+                is_not_found =self._checker_not_found(cel, nombre)
                 if is_not_found:
                     continue
                 else:
@@ -209,15 +193,26 @@ Link del formulario: https://forms.gle/TnxrMzJwiFmSyS
         self.open_wsp()
         self.start_rows_iteration()
         
-        input("Press enter to quit...")
+        input("Presiona enter para cerrar...")
         self.driver.quit()
 
 
 if __name__ == "__main__":
-    images = ["gondolazo.jpeg"]
+    images = []
     documents = []
 
-    automator = WhatsAppAutomator(images, documents)
+
+    cantidad_de_cajas = input("Cuantas cajas se entregan? Escribir numero ")
+    dia = input("Que dia? ej. hoy, mañana ")
+    fecha = input("fecha? ej. 13/11 ")
+    message = f"""Hola, como va? Hoy hay *entrega especial de CARNE*, SON {cantidad_de_cajas} CAJAS de aprox 25 kg cada caja. Fue una donación que con mucho trabajo conseguimos 💪. 
+Gracias por su constante apoyo. 
+FECHA Y HORARIO:  *{dia} {fecha} de 14 a 16 hs.*
+            """
+    
+    name_of_excel= "envio_wsp.xlsx"
+
+    automator = WhatsAppAutomator(message, name_of_excel, images, documents)
     automator.trigger_automatization()
 
 
